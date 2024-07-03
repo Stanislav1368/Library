@@ -1,4 +1,6 @@
-﻿namespace Library.Application.DTOs
+﻿using System.Text.Json.Serialization;
+
+namespace Library.Application.DTOs
 {
     public class RenterDto
     {
@@ -8,6 +10,8 @@
         public string Patronymic { get; set; }
         public string Address { get; set; }
         public string ContactNumber { get; set; }
+
+        
         public ICollection<RentalDto> Rentals { get; set; }
     }
 }

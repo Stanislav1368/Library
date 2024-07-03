@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 
 namespace Library.Application.DTOs
 {
@@ -6,6 +7,7 @@ namespace Library.Application.DTOs
     {
         public int Id { get; set; }
         public BookDto Book { get; set; }
+        [JsonIgnore]
         public RenterDto Renter { get; set; }
         public DateTime RentedAt { get; set; }
         public DateTime? ReturnedAt { get; set; }
@@ -15,7 +17,6 @@ namespace Library.Application.DTOs
     }
     public class CreateRentalDto
     {
-        public int Id { get; set; }
         public int BookId { get; set; }
         public int RenterId { get; set; }
         public int LibrarianId { get; set; }

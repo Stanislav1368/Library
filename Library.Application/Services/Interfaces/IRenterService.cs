@@ -7,9 +7,9 @@ namespace Library.Application.Services.Interfaces
     public interface IRenterService
     {
         Task<IEnumerable<RenterDto>> GetAllRentersAsync();
-        Task<RenterDto> GetRenterByIdAsync(int id);
+        //Task<RenterDto> GetRenterByIdAsync(int id);
         Task<RenterDto> CreateRenterAsync(RenterDto renterDto);
-        Task UpdateRenterAsync(int id, RenterDto renterDto);
-        Task DeleteRenterAsync(int id);
+        //Task UpdateRenterAsync(int id, RenterDto renterDto);
+        //Task DeleteRenterAsync(int id);
     }
 }

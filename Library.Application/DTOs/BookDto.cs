@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Library.Application.DTOs
 {
@@ -12,9 +13,10 @@ namespace Library.Application.DTOs
         public DateTime? PublicationYear { get; set; }
         public bool IsAvailable { get; set; }
 
-        public ICollection<AuthorDto> Authors { get; set; } = new List<AuthorDto>();    
-        public ICollection<GenreDto> Genres { get; set; } = new List<GenreDto>();
-        public ICollection<RentalDto> Rentals { get; set; } = new List<RentalDto>();
+        public ICollection<AuthorDto> Authors { get; set; }    
+        public ICollection<GenreDto> Genres { get; set; }
+        [JsonIgnore]
+        public ICollection<RentalDto> Rentals { get; set; } 
     }
 
     public class CreateBookDto

@@ -63,6 +63,13 @@ namespace Library.Application.Services.Implementations
                     {
                         Id = r.Status.Id,
                         Name = r.Status.Name
+                    },
+                    Librarian = new LibrarianDto
+                    {
+                        Id = r.Librarian.Id,
+                        FirstName = r.Librarian.FirstName,
+                        LastName = r.Librarian.LastName,
+                        Patronymic = r.Librarian.Patronymic
                     }
                 })
                 .ToListAsync();
@@ -128,7 +135,7 @@ namespace Library.Application.Services.Implementations
             {
                 BookId = createRentalDto.BookId,
                 RenterId = createRentalDto.RenterId,
-                LibrarianId = createRentalDto.LibrarianId,  
+                LibrarianId = createRentalDto.LibrarianId,
                 StatusId = createRentalDto.StatusId,
                 RentedAt = createRentalDto.RentedAt,
                 ReturnedAt = createRentalDto.ReturnedAt,
@@ -136,6 +143,19 @@ namespace Library.Application.Services.Implementations
 
             _context.Rentals.Add(rental);
             await _context.SaveChangesAsync();
+
+            // Load the rental with related entities
+            rental = await _context.Rentals
+                .Include(r => r.Book)
+                    .ThenInclude(b => b.AuthorBooks)
+                        .ThenInclude(ab => ab.Author)
+                .Include(r => r.Book)
+                    .ThenInclude(b => b.GenreBooks)
+                        .ThenInclude(gb => gb.Genre)
+                .Include(r => r.Renter)
+                .Include(r => r.Status)
+                .Include(r => r.Librarian)
+                .FirstOrDefaultAsync(r => r.Id == rental.Id);
 
             return new RentalDto
             {
@@ -145,7 +165,7 @@ namespace Library.Application.Services.Implementations
                 Review = rental.Review,
                 Book = new BookDto
                 {
-                    Id = rental.Book.Id,
+                    Id = rental.BookId,
                     Title = rental.Book.Title,
                     PublicationYear = rental.Book.PublicationYear,
                     IsAvailable = rental.Book.IsAvailable,
@@ -178,13 +198,14 @@ namespace Library.Application.Services.Implementations
                 },
                 Librarian = new LibrarianDto
                 {
-                    Id = rental.Status.Id,
+                    Id = rental.Librarian.Id,
                     FirstName = rental.Librarian.FirstName,
                     LastName = rental.Librarian.LastName,
                     Patronymic = rental.Librarian.Patronymic
                 }
             };
         }
+
 
         public async Task UpdateRentalAsync(int id, RentalDto rentalDto)
         {

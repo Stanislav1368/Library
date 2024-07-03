@@ -11,6 +11,10 @@ builder.Services.AddDbContext<LibraryContext>(options =>
 
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IRentalService, RentalService>();
+builder.Services.AddScoped<IAuthorService, AuthorService>();
+builder.Services.AddScoped<IGenreService, GenreService>();
+builder.Services.AddScoped<IStatusService, StatusService>();
+builder.Services.AddScoped<IRenterService, RenterService>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

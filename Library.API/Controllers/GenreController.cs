@@ -24,7 +24,7 @@ namespace Library.Api.Controllers
             return Ok(genres);
         }
 
-        [HttpPost]
+        [HttpPost] //Доработать
         public async Task<ActionResult<GenreDto>> CreateGenre(GenreDto genreDto)
         {
             var genre = await _genreService.CreateGenreAsync(genreDto);

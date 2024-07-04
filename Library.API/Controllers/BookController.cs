@@ -42,7 +42,7 @@ namespace Library.API.Controllers
             return CreatedAtAction(nameof(GetBook), new { id = createdBook.Id }, createdBook);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}")] //Доработать
         public async Task<IActionResult> UpdateBook(int id, BookDto bookDto)
         {
             try

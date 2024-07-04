@@ -9,7 +9,7 @@ namespace Library.Application.Services.Interfaces
         Task<IEnumerable<RentalDto>> GetAllRentalsAsync();
         Task<RentalDto> GetRentalByIdAsync(int id);
         Task<RentalDto> CreateRentalAsync(CreateRentalDto createRentalDto);
-        Task UpdateRentalAsync(int id, RentalDto rentalDto);
+        Task UpdateRentalAsync(int id, UpdateRentalDto updateRentalDto);
         Task DeleteRentalAsync(int id);
     }
 }

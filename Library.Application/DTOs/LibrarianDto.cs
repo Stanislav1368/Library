@@ -13,4 +13,9 @@ namespace Library.Application.DTOs
         public string LastName { get; set; }
         public string Patronymic { get; set; }
     }
+    public class AuthLibrarianDto
+    {
+        public string Login { get; set; }
+        public string Password { get; set; }
+    }
 }

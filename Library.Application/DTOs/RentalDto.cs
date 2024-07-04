@@ -25,4 +25,12 @@ namespace Library.Application.DTOs
         public DateTime? ReturnedAt { get;set; }
     }
 
+    public class UpdateRentalDto
+    {
+        public int? RenterId { get; set; }
+        public int? StatusId { get; set; }
+        public DateTime? RentedAt { get; set; }
+        public DateTime? ReturnedAt { get; set; }
+        public string? Review { get; set; }
+    }
 }

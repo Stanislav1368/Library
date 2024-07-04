@@ -24,10 +24,10 @@ namespace Library.Api.Controllers
             return Ok(renters);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<RenterDto>> CreateRenter(RenterDto renterDto)
+        [HttpPost] //Доработать
+        public async Task<ActionResult<RenterDto>> CreateRenter(CreateRenterDto createRenterDto)
         {
-            var renter = await _renterService.CreateRenterAsync(renterDto);
+            var renter = await _renterService.CreateRenterAsync(createRenterDto);
             return CreatedAtAction(nameof(GetAllRenters), new { id = renter.Id }, renter);
         }
     }

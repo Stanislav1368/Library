@@ -8,7 +8,7 @@ namespace Library.Application.Services.Interfaces
     {
         Task<IEnumerable<RenterDto>> GetAllRentersAsync();
         //Task<RenterDto> GetRenterByIdAsync(int id);
-        Task<RenterDto> CreateRenterAsync(RenterDto renterDto);
+        Task<RenterDto> CreateRenterAsync(CreateRenterDto createRenterDto);
         //Task UpdateRenterAsync(int id, RenterDto renterDto);
         //Task DeleteRenterAsync(int id);
     }

@@ -134,15 +134,15 @@ namespace Library.Application.Services.Implementations
             };
         }
 
-        public async Task<RenterDto> CreateRenterAsync(RenterDto renterDto)
+        public async Task<RenterDto> CreateRenterAsync(CreateRenterDto createRenterDto)
         {
             var renter = new Renter
             {
-                FirstName = renterDto.FirstName,
-                LastName = renterDto.LastName,
-                Patronymic = renterDto.Patronymic,
-                Address = renterDto.Address,
-                ContactNumber = renterDto.ContactNumber
+                FirstName = createRenterDto.FirstName,
+                LastName = createRenterDto.LastName,
+                Patronymic = createRenterDto.Patronymic,
+                Address = createRenterDto.Address,
+                ContactNumber = createRenterDto.ContactNumber
             };
 
             _context.Renters.Add(renter);

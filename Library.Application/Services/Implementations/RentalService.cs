@@ -207,19 +207,18 @@ namespace Library.Application.Services.Implementations
         }
 
 
-        public async Task UpdateRentalAsync(int id, RentalDto rentalDto)
+        public async Task UpdateRentalAsync(int id, UpdateRentalDto updateRentalDto)
         {
             var rental = await _context.Rentals.FindAsync(id);
 
             if (rental == null)
                 throw new KeyNotFoundException();
 
-            rental.BookId = rentalDto.Book.Id;
-            rental.RenterId = rentalDto.Renter.Id;
-            rental.RentedAt = rentalDto.RentedAt;
-            rental.ReturnedAt = rentalDto.ReturnedAt;
-            rental.StatusId = rentalDto.Status.Id;
-            rental.Review = rentalDto.Review;
+            rental.RenterId = updateRentalDto.RenterId ?? rental.RenterId;
+            rental.StatusId = updateRentalDto.StatusId ?? rental.StatusId;
+            rental.RentedAt = updateRentalDto.RentedAt ?? rental.RentedAt;
+            rental.ReturnedAt = updateRentalDto.ReturnedAt ?? rental.ReturnedAt;
+            rental.Review = updateRentalDto.Review ?? rental.Review;
 
             await _context.SaveChangesAsync();
         }

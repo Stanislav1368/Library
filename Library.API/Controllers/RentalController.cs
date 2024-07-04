@@ -43,11 +43,11 @@ namespace Library.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateRental(int id, RentalDto rentalDto)
+        public async Task<IActionResult> UpdateRental(int id, UpdateRentalDto updateRentalDto)
         {
             try
             {
-                await _rentalService.UpdateRentalAsync(id, rentalDto);
+                await _rentalService.UpdateRentalAsync(id, updateRentalDto);
                 return NoContent();
             }
             catch (KeyNotFoundException)

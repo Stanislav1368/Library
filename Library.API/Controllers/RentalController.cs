@@ -43,18 +43,19 @@ namespace Library.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateRental(int id, UpdateRentalDto updateRentalDto)
+        public async Task<ActionResult<RentalDto>> UpdateRental(int id, UpdateRentalDto updateRentalDto)
         {
             try
             {
-                await _rentalService.UpdateRentalAsync(id, updateRentalDto);
-                return NoContent();
+                var updatedRental = await _rentalService.UpdateRentalAsync(id, updateRentalDto);
+                return Ok(updatedRental);
             }
             catch (KeyNotFoundException)
             {
                 return NotFound();
             }
         }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRental(int id)

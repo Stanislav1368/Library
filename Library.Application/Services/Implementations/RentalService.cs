@@ -207,7 +207,7 @@ namespace Library.Application.Services.Implementations
         }
 
 
-        public async Task UpdateRentalAsync(int id, UpdateRentalDto updateRentalDto)
+        public async Task<RentalDto> UpdateRentalAsync(int id, UpdateRentalDto updateRentalDto)
         {
             var rental = await _context.Rentals.FindAsync(id);
 
@@ -221,6 +221,67 @@ namespace Library.Application.Services.Implementations
             rental.Review = updateRentalDto.Review ?? rental.Review;
 
             await _context.SaveChangesAsync();
+
+            // Load the updated rental with related entities
+            rental = await _context.Rentals
+                .Include(r => r.Book)
+                    .ThenInclude(b => b.AuthorBooks)
+                        .ThenInclude(ab => ab.Author)
+                .Include(r => r.Book)
+                    .ThenInclude(b => b.GenreBooks)
+                        .ThenInclude(gb => gb.Genre)
+                .Include(r => r.Renter)
+                .Include(r => r.Status)
+                .Include(r => r.Librarian)
+                .FirstOrDefaultAsync(r => r.Id == rental.Id);
+
+            return new RentalDto
+            {
+                Id = rental.Id,
+                RentedAt = rental.RentedAt,
+                ReturnedAt = rental.ReturnedAt,
+                Review = rental.Review,
+                Book = new BookDto
+                {
+                    Id = rental.BookId,
+                    Title = rental.Book.Title,
+                    PublicationYear = rental.Book.PublicationYear,
+                    IsAvailable = rental.Book.IsAvailable,
+                    Authors = rental.Book.AuthorBooks.Select(ab => new AuthorDto
+                    {
+                        Id = ab.Author.Id,
+                        FirstName = ab.Author.FirstName,
+                        LastName = ab.Author.LastName,
+                        Patronymic = ab.Author.Patronymic
+                    }).ToList(),
+                    Genres = rental.Book.GenreBooks.Select(gb => new GenreDto
+                    {
+                        Id = gb.Genre.Id,
+                        Name = gb.Genre.Name
+                    }).ToList()
+                },
+                Renter = new RenterDto
+                {
+                    Id = rental.Renter.Id,
+                    FirstName = rental.Renter.FirstName,
+                    LastName = rental.Renter.LastName,
+                    Patronymic = rental.Renter.Patronymic,
+                    Address = rental.Renter.Address,
+                    ContactNumber = rental.Renter.ContactNumber
+                },
+                Status = new StatusDto
+                {
+                    Id = rental.Status.Id,
+                    Name = rental.Status.Name
+                },
+                Librarian = new LibrarianDto
+                {
+                    Id = rental.Librarian.Id,
+                    FirstName = rental.Librarian.FirstName,
+                    LastName = rental.Librarian.LastName,
+                    Patronymic = rental.Librarian.Patronymic
+                }
+            };
         }
 
         public async Task DeleteRentalAsync(int id)

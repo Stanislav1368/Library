@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore; 
+using Microsoft.EntityFrameworkCore;
 using Library.Infrastructure;
 using Library.Application.Services.Interfaces;
 using Library.Application.Services.Implementations;
@@ -16,6 +16,19 @@ builder.Services.AddScoped<IGenreService, GenreService>();
 builder.Services.AddScoped<IStatusService, StatusService>();
 builder.Services.AddScoped<IRenterService, RenterService>();
 builder.Services.AddControllers();
+
+// Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -30,6 +43,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAllOrigins");
 
 app.UseAuthorization();
 

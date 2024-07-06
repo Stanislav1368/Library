@@ -97,6 +97,36 @@ namespace Library.Infrastructure.Migrations
                     b.ToTable("Books");
                 });
 
+            modelBuilder.Entity("Library.Domain.Entities.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("CommentText")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CommentedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("RenterId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("RenterId");
+
+                    b.ToTable("Comments");
+                });
+
             modelBuilder.Entity("Library.Domain.Entities.Genre", b =>
                 {
                     b.Property<int>("Id")
@@ -168,6 +198,32 @@ namespace Library.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Librarians");
+                });
+
+            modelBuilder.Entity("Library.Domain.Entities.Rating", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("RatingValue")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("RenterId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("RenterId");
+
+                    b.ToTable("Ratings");
                 });
 
             modelBuilder.Entity("Library.Domain.Entities.Rental", b =>
@@ -281,6 +337,25 @@ namespace Library.Infrastructure.Migrations
                     b.Navigation("Book");
                 });
 
+            modelBuilder.Entity("Library.Domain.Entities.Comment", b =>
+                {
+                    b.HasOne("Library.Domain.Entities.Book", "Book")
+                        .WithMany("Comments")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Library.Domain.Entities.Renter", "Renter")
+                        .WithMany()
+                        .HasForeignKey("RenterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("Renter");
+                });
+
             modelBuilder.Entity("Library.Domain.Entities.GenreBook", b =>
                 {
                     b.HasOne("Library.Domain.Entities.Book", "Book")
@@ -298,6 +373,25 @@ namespace Library.Infrastructure.Migrations
                     b.Navigation("Book");
 
                     b.Navigation("Genre");
+                });
+
+            modelBuilder.Entity("Library.Domain.Entities.Rating", b =>
+                {
+                    b.HasOne("Library.Domain.Entities.Book", "Book")
+                        .WithMany("Ratings")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Library.Domain.Entities.Renter", "Renter")
+                        .WithMany()
+                        .HasForeignKey("RenterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("Renter");
                 });
 
             modelBuilder.Entity("Library.Domain.Entities.Rental", b =>
@@ -344,7 +438,11 @@ namespace Library.Infrastructure.Migrations
                 {
                     b.Navigation("AuthorBooks");
 
+                    b.Navigation("Comments");
+
                     b.Navigation("GenreBooks");
+
+                    b.Navigation("Ratings");
 
                     b.Navigation("Rentals");
                 });

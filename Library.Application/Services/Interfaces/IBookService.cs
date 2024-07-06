@@ -11,6 +11,8 @@ namespace Library.Application.Services.Interfaces
         Task<BookDto> GetBookByIdAsync(int id);
         Task<BookDto> CreateBookAsync(CreateBookDto createBookDto);
         Task UpdateBookAsync(int id, BookDto bookDto);
+        Task CommentOnTheBookAsync(int id, CreateCommentDto createCommentDto);
+        Task AddRatingAsync(int id, AddRatingDto addRatingDto);
         Task DeleteBookAsync(int id);
     }
 }

@@ -6,6 +6,7 @@ using Library.Application.Services.Interfaces;
 using Library.Domain.Entities;
 using Library.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 
 namespace Library.Application.Services.Implementations
 {
@@ -13,9 +14,11 @@ namespace Library.Application.Services.Implementations
     {
         private readonly LibraryContext _context;
 
+
         public BookService(LibraryContext context)
         {
             _context = context;
+
         }
 
         public async Task<IEnumerable<BookDto>> GetAllBooksAsync()
@@ -63,7 +66,13 @@ namespace Library.Application.Services.Implementations
                             Id = r.Status.Id,
                             Name = r.Status.Name
                         }
-                    }).ToList()
+                    }).ToList(),
+                    Comments = b.Comments.Select(c => new CommentDto
+                    {
+                        CommentText = c.CommentText,
+                        CommentedAt = c.CommentedAt,
+                    }).ToList(),
+                    AverageRating = b.Ratings.Count > 0 ? b.Ratings.Average(r => r.RatingValue) : 0.0,
                 })
                 .ToListAsync();
         }
@@ -79,7 +88,7 @@ namespace Library.Application.Services.Implementations
             if (book == null) {
                 return null;
             }
-                
+
 
             return new BookDto
             {
@@ -129,12 +138,25 @@ namespace Library.Application.Services.Implementations
             {
                 Title = createBookDto.Title,
                 PublicationYear = createBookDto.PublicationYear.HasValue
-                       ? createBookDto.PublicationYear.Value.ToUniversalTime()
-                       : (DateTime?)null,
+                    ? createBookDto.PublicationYear.Value.ToUniversalTime()
+                    : null,
                 IsAvailable = createBookDto.IsAvailable
             };
 
-            // Add authors to the book
+            if (createBookDto.Image != null)
+            {
+                var fileExtension = Path.GetExtension(createBookDto.Image.FileName);
+                var uniqueFileName = $"{Guid.NewGuid()}{fileExtension}";
+                var filePath = Path.Combine("wwwroot", "images", uniqueFileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await createBookDto.Image.CopyToAsync(stream);
+                }
+
+                book.ImagePath = $"/images/{uniqueFileName}";
+            }
+
             if (createBookDto.AuthorIds != null && createBookDto.AuthorIds.Any())
             {
                 foreach (var authorId in createBookDto.AuthorIds)
@@ -147,7 +169,6 @@ namespace Library.Application.Services.Implementations
                 }
             }
 
-            // Add genres to the book
             if (createBookDto.GenreIds != null && createBookDto.GenreIds.Any())
             {
                 foreach (var genreId in createBookDto.GenreIds)
@@ -167,6 +188,7 @@ namespace Library.Application.Services.Implementations
             {
                 Id = book.Id,
                 Title = book.Title,
+                ImagePath = book.ImagePath,
                 PublicationYear = book.PublicationYear,
                 IsAvailable = book.IsAvailable,
                 Authors = book.AuthorBooks.Select(ab => new AuthorDto
@@ -184,6 +206,7 @@ namespace Library.Application.Services.Implementations
             };
         }
 
+
         public async Task UpdateBookAsync(int id, BookDto bookDto)
         {
             var book = await _context.Books.FindAsync(id);
@@ -198,6 +221,43 @@ namespace Library.Application.Services.Implementations
             await _context.SaveChangesAsync();
         }
 
+        public async Task CommentOnTheBookAsync(int id, CreateCommentDto createCommentDto)
+        {
+            var comment = new Comment
+            {
+                RenterId = createCommentDto.RenterId,
+                BookId = id,
+                CommentText = createCommentDto.CommentText,
+                CommentedAt = DateTime.UtcNow 
+            };
+
+            
+
+            _context.Comments.Add(comment);
+            await _context.SaveChangesAsync();
+        }
+        public async Task AddRatingAsync(int id, AddRatingDto addRatingDto)
+        {
+            var existingRating = await _context.Ratings.FirstOrDefaultAsync(r => r.RenterId == addRatingDto.RenterId && r.BookId == id);
+
+            if (existingRating != null)
+            {
+                existingRating.RatingValue = addRatingDto.RatingValue;
+            }
+            else
+            {
+                var rating = new Rating
+                {
+                    RenterId = addRatingDto.RenterId,
+                    BookId = id,
+                    RatingValue = addRatingDto.RatingValue
+                };
+
+                _context.Ratings.Add(rating);
+            }
+
+            await _context.SaveChangesAsync();
+        }
         public async Task DeleteBookAsync(int id)
         {
             var book = await _context.Books.FindAsync(id);
@@ -208,5 +268,6 @@ namespace Library.Application.Services.Implementations
             _context.Books.Remove(book);
             await _context.SaveChangesAsync();
         }
+
     }
 }

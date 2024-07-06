@@ -36,7 +36,7 @@ namespace Library.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<BookDto>> CreateBook(CreateBookDto createBookDto)
+        public async Task<ActionResult<BookDto>> CreateBook([FromForm] CreateBookDto createBookDto)
         {
             var createdBook = await _bookService.CreateBookAsync(createBookDto);
             return CreatedAtAction(nameof(GetBook), new { id = createdBook.Id }, createdBook);
@@ -48,6 +48,34 @@ namespace Library.API.Controllers
             try
             {
                 await _bookService.UpdateBookAsync(id, bookDto);
+                return NoContent();
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpPost("{id}/addComment")] 
+        public async Task<IActionResult> CommentOnTheBook(int id, CreateCommentDto createCommentDto)
+        {
+            try
+            {
+                await _bookService.CommentOnTheBookAsync(id, createCommentDto);
+                return NoContent();
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpPost("{id}/addRating")]
+        public async Task<IActionResult> RateBook(int id, AddRatingDto addRatingDto)
+        {
+            try
+            {
+                await _bookService.AddRatingAsync(id, addRatingDto);
                 return NoContent();
             }
             catch (KeyNotFoundException)

@@ -20,5 +20,7 @@ namespace Library.Infrastructure
         public DbSet<Renter> Renters { get; set; }
         public DbSet<Status> Statuses { get; set; }
         public DbSet<Librarian> Librarians { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
+        public DbSet<Comment> Comments { get; set; }
     }
 }

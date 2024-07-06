@@ -11,7 +11,7 @@ namespace Library.Application.DTOs
         public string Title { get; set; }
         public string ImagePath { get; set; } = string.Empty;
         public DateTime? PublicationYear { get; set; }
-        public bool IsAvailable { get; set; }
+        public bool? IsAvailable { get; set; }
 
         public ICollection<AuthorDto> Authors { get; set; }    
         public ICollection<GenreDto> Genres { get; set; }
@@ -23,10 +23,10 @@ namespace Library.Application.DTOs
 
     public class CreateBookDto
     {
-        public string Title { get; set; }
-        public IFormFile Image { get; set; } // Add this property
+        public string? Title { get; set; }
+        public IFormFile? Image { get; set; } 
         public DateTime? PublicationYear { get; set; }
-        public bool IsAvailable { get; set; } = true;
+        public bool? IsAvailable { get; set; } = true;
         public List<int>? AuthorIds { get; set; }
         public List<int>? GenreIds { get; set; }
 

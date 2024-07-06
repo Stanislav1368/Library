@@ -15,7 +15,7 @@ builder.Services.AddScoped<IAuthorService, AuthorService>();
 builder.Services.AddScoped<IGenreService, GenreService>();
 builder.Services.AddScoped<IStatusService, StatusService>();
 builder.Services.AddScoped<IRenterService, RenterService>();
-builder.Services.AddScoped<IAuthLibrarianService, AuthLibrarianService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddControllers();
 
 // Add CORS policy

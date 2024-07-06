@@ -10,6 +10,6 @@ namespace Library.Domain.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public ICollection<GenreBook> GenreBooks { get; set; }
+        public ICollection<GenreBook> GenreBooks { get; set; } = new List<GenreBook>();
     }
 }

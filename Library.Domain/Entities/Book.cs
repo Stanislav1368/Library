@@ -12,11 +12,11 @@ namespace Library.Domain.Entities
         public string Title { get; set; }
         public string ImagePath { get; set; } = string.Empty;
         public DateTime? PublicationYear { get; set; }
-        public bool IsAvailable { get; set; } = true;
-        public ICollection<AuthorBook> AuthorBooks { get; set; } 
-        public ICollection<GenreBook> GenreBooks { get; set; } 
-        public ICollection<Rental> Rentals { get; set; }
-        public ICollection<Rating> Ratings { get; set; }
-        public ICollection<Comment> Comments { get; set; }
+        public bool? IsAvailable { get; set; } = true;
+        public ICollection<AuthorBook> AuthorBooks { get; set; } = new List<AuthorBook>();
+        public ICollection<GenreBook> GenreBooks { get; set; } = new List<GenreBook>();
+        public ICollection<Rental> Rentals { get; set; } = new List<Rental>();
+        public ICollection<Rating> Ratings { get; set; } = new List<Rating>();
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }
 }

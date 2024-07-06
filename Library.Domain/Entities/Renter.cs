@@ -14,6 +14,7 @@ namespace Library.Domain.Entities
         public string Patronymic { get; set; }
         public string Address { get; set; }
         public string ContactNumber { get; set; }
-        public ICollection<Rental> Rentals { get; set; }
+        public string Password { get; set; }
+        public ICollection<Rental> Rentals { get; set; } = new List<Rental>();
     }
 }

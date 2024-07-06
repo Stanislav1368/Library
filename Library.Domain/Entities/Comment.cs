@@ -13,7 +13,7 @@ namespace Library.Domain.Entities
         public int BookId { get; set; }
         public string CommentText { get; set; }  
         public DateTime CommentedAt { get; set; }
-        public Renter Renter { get; set; }
+        public Renter Renter { get; set; } 
         public Book Book { get; set; }
     }
 }

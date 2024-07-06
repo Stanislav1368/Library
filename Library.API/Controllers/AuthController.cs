@@ -19,14 +19,24 @@ namespace Library.API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<object>> Login(AuthRequestDto authRequestDto)
         {
-  
-                var renter = await _authService.AuthenticateAsync(authRequestDto.Login, authRequestDto.Password, authRequestDto.IsRenter);
+            if (authRequestDto.IsRenter)
+            {
+                var renter = await _authService.AuthenticateAsync(authRequestDto.Login, authRequestDto.Password, true);
 
                 if (renter == null)
                     return Unauthorized();
 
                 return Ok(renter);
-           
+            }
+            else
+            {
+                var librarian = await _authService.AuthenticateAsync(authRequestDto.Login, authRequestDto.Password);
+
+                if (librarian == null)
+                    return Unauthorized();
+
+                return Ok(librarian);
+            }
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Library.Domain.Entities
         public int Id { get; set; }
         public int RenterId { get; set; }
         public int BookId { get; set; }
-        public int RatingValue { get; set; }  
+        public double RatingValue { get; set; }  
 
         public virtual Renter Renter { get; set; }
         public virtual Book Book { get; set; }

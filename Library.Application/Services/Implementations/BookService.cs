@@ -82,13 +82,16 @@ namespace Library.Application.Services.Implementations
             var book = await _context.Books
                 .Include(b => b.AuthorBooks).ThenInclude(ab => ab.Author)
                 .Include(b => b.GenreBooks).ThenInclude(gb => gb.Genre)
-                .Include(b => b.Rentals)
+                .Include(b => b.Rentals).ThenInclude(r => r.Renter)
+                .Include(b => b.Rentals).ThenInclude(r => r.Status) 
+                .Include(b => b.Comments).ThenInclude(c => c.Renter)
+                .Include(b => b.Ratings) 
                 .SingleOrDefaultAsync(b => b.Id == id);
 
-            if (book == null) {
+            if (book == null)
+            {
                 return null;
             }
-
 
             return new BookDto
             {
@@ -98,15 +101,15 @@ namespace Library.Application.Services.Implementations
                 IsAvailable = book.IsAvailable,
                 Authors = book.AuthorBooks.Select(ab => new AuthorDto
                 {
-                    Id = ab.Author.Id,
-                    FirstName = ab.Author.FirstName,
-                    LastName = ab.Author.LastName,
-                    Patronymic = ab.Author.Patronymic
+                    Id = ab.Author?.Id ?? 0, // Use null-coalescing operator to handle null values
+                    FirstName = ab.Author?.FirstName,
+                    LastName = ab.Author?.LastName,
+                    Patronymic = ab.Author?.Patronymic
                 }).ToList(),
                 Genres = book.GenreBooks.Select(gb => new GenreDto
                 {
-                    Id = gb.Genre.Id,
-                    Name = gb.Genre.Name
+                    Id = gb.Genre?.Id ?? 0, // Use null-coalescing operator to handle null values
+                    Name = gb.Genre?.Name
                 }).ToList(),
                 Rentals = book.Rentals.Select(r => new RentalDto
                 {
@@ -114,7 +117,7 @@ namespace Library.Application.Services.Implementations
                     RentedAt = r.RentedAt,
                     ReturnedAt = r.ReturnedAt,
                     Review = r.Review,
-                    Renter = new RenterDto
+                    Renter = r.Renter == null ? null : new RenterDto
                     {
                         Id = r.Renter.Id,
                         FirstName = r.Renter.FirstName,
@@ -123,12 +126,25 @@ namespace Library.Application.Services.Implementations
                         Address = r.Renter.Address,
                         ContactNumber = r.Renter.ContactNumber
                     },
-                    Status = new StatusDto
+                    Status = r.Status == null ? null : new StatusDto
                     {
                         Id = r.Status.Id,
                         Name = r.Status.Name
                     }
-                }).ToList()
+                }).ToList(),
+                Comments = book.Comments.Select(c => new CommentDto
+                {
+                    CommentText = c.CommentText,
+                    CommentedAt = c.CommentedAt,
+                    Renter = c.Renter,
+                }).ToList(),
+                AverageRating = book.Ratings.Count > 0 ? book.Ratings.Average(r => r.RatingValue) : 0.0,
+                Ratings = book.Ratings.Select(r => new RatingDto
+                {
+                    RatingValue = r.RatingValue,
+                    RenterId = r.RenterId,
+
+                }).ToList(),
             };
         }
 

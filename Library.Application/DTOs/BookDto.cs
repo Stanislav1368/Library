@@ -13,11 +13,12 @@ namespace Library.Application.DTOs
         public DateTime? PublicationYear { get; set; }
         public bool? IsAvailable { get; set; }
 
-        public ICollection<AuthorDto> Authors { get; set; }    
-        public ICollection<GenreDto> Genres { get; set; }
+        public ICollection<AuthorDto> Authors { get; set; } = new List<AuthorDto>();
+        public ICollection<GenreDto> Genres { get; set; } = new List<GenreDto>();
         [JsonIgnore]
-        public ICollection<RentalDto> Rentals { get; set; }
-        public ICollection<CommentDto> Comments { get; set; }
+        public ICollection<RentalDto> Rentals { get; set; } = new List<RentalDto>();
+        public ICollection<CommentDto> Comments { get; set; } = new List<CommentDto>();
+        public ICollection<RatingDto> Ratings { get; set; } = new List<RatingDto>();
         public double? AverageRating { get; set; }
     }
 

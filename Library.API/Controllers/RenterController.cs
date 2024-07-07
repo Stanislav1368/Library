@@ -24,8 +24,8 @@ namespace Library.Api.Controllers
             return Ok(renters);
         }
 
-        [HttpPost] //Доработать
-        public async Task<ActionResult<RenterDto>> CreateRenter(CreateRenterDto createRenterDto)
+        [HttpPost] 
+        public async Task<ActionResult<NewRenterDto>> CreateRenter(CreateRenterDto createRenterDto)
         {
             var renter = await _renterService.CreateRenterAsync(createRenterDto);
             return CreatedAtAction(nameof(GetAllRenters), new { id = renter.Id }, renter);

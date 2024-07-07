@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Library.Application.DTOs;
@@ -134,28 +135,33 @@ namespace Library.Application.Services.Implementations
             };
         }
 
-        public async Task<RenterDto> CreateRenterAsync(CreateRenterDto createRenterDto)
+        public async Task<NewRenterDto> CreateRenterAsync(CreateRenterDto createRenterDto)
         {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            var random = new Random();
             var renter = new Renter
             {
                 FirstName = createRenterDto.FirstName,
                 LastName = createRenterDto.LastName,
                 Patronymic = createRenterDto.Patronymic,
                 Address = createRenterDto.Address,
-                ContactNumber = createRenterDto.ContactNumber
+                ContactNumber = createRenterDto.ContactNumber,
+                Password = new string(Enumerable.Repeat(chars, 6).Select(s => s[random.Next(s.Length)]).ToArray())
+
             };
 
             _context.Renters.Add(renter);
             await _context.SaveChangesAsync();
 
-            return new RenterDto
+            return new NewRenterDto
             {
                 Id = renter.Id,
                 FirstName = renter.FirstName,
                 LastName = renter.LastName,
                 Patronymic = renter.Patronymic,
                 Address = renter.Address,
-                ContactNumber = renter.ContactNumber
+                ContactNumber = renter.ContactNumber,
+                Password = renter.Password
             };
         }
 

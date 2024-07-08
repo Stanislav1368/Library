@@ -15,7 +15,7 @@ namespace Library.Application.DTOs
 
         public ICollection<AuthorDto> Authors { get; set; } = new List<AuthorDto>();
         public ICollection<GenreDto> Genres { get; set; } = new List<GenreDto>();
-        [JsonIgnore]
+   
         public ICollection<RentalDto> Rentals { get; set; } = new List<RentalDto>();
         public ICollection<CommentDto> Comments { get; set; } = new List<CommentDto>();
         public ICollection<RatingDto> Ratings { get; set; } = new List<RatingDto>();

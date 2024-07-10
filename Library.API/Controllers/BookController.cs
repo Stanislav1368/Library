@@ -25,7 +25,7 @@ namespace Library.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<BookDto>> GetBook(int id)
+        public async Task<ActionResult<object>> GetBook(int id)
         {
             var book = await _bookService.GetBookByIdAsync(id);
             if (book == null)

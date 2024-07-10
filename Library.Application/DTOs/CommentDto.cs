@@ -12,7 +12,7 @@ namespace Library.Application.DTOs
         public string CommentText { get; set; }
         public DateTime CommentedAt { get; set; }
         public virtual Renter Renter { get; set; }
-        public virtual Book Book { get; set; }
+        //public virtual Book Book { get; set; }
     }
     public class CreateCommentDto
     {

@@ -16,8 +16,9 @@ namespace Library.Domain.Entities
         public Renter Renter { get; set; }
         public int LibrarianId { get; set; }
         public Librarian Librarian { get; set; }
-        public DateTime RentedAt { get; set; }
+        public DateTime RentedAt { get; set; } = DateTime.Now;
         public DateTime? ReturnedAt { get; set; }
+        public DateTime? ActualReturnedAt { get; set; }
         public int StatusId { get; set; }
         public Status Status { get; set; }
         public string? Review { get; set; }

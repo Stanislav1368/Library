@@ -11,6 +11,7 @@ namespace Library.Application.DTOs
         public RenterDto Renter { get; set; }
         public DateTime RentedAt { get; set; }
         public DateTime? ReturnedAt { get; set; }
+        public DateTime? ActualReturnedAt { get; set; }
         public StatusDto Status { get; set; }
         public LibrarianDto Librarian { get; set; }
         public string? Review { get; set; }
@@ -31,6 +32,7 @@ namespace Library.Application.DTOs
         public int? StatusId { get; set; }
         public DateTime? RentedAt { get; set; }
         public DateTime? ReturnedAt { get; set; }
+        public DateTime? ActualReturnedAt { get; set; }
         public string? Review { get; set; }
     }
 }

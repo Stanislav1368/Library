@@ -30,6 +30,7 @@ namespace Library.Application.Services.Implementations
                     Id = r.Id,
                     RentedAt = r.RentedAt,
                     ReturnedAt = r.ReturnedAt,
+                    ActualReturnedAt = r.ActualReturnedAt,
                     Review = r.Review,
                     Book = new BookDto
                     {
@@ -218,6 +219,7 @@ namespace Library.Application.Services.Implementations
             rental.StatusId = updateRentalDto.StatusId ?? rental.StatusId;
             rental.RentedAt = updateRentalDto.RentedAt ?? rental.RentedAt;
             rental.ReturnedAt = updateRentalDto.ReturnedAt ?? rental.ReturnedAt;
+            rental.ActualReturnedAt = updateRentalDto.ActualReturnedAt ?? rental.ActualReturnedAt;
             rental.Review = updateRentalDto.Review ?? rental.Review;
 
             await _context.SaveChangesAsync();
@@ -240,6 +242,7 @@ namespace Library.Application.Services.Implementations
                 Id = rental.Id,
                 RentedAt = rental.RentedAt,
                 ReturnedAt = rental.ReturnedAt,
+                ActualReturnedAt = rental.ActualReturnedAt,
                 Review = rental.Review,
                 Book = new BookDto
                 {

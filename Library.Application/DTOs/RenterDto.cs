@@ -10,6 +10,7 @@ namespace Library.Application.DTOs
         public string Patronymic { get; set; }
         public string Address { get; set; }
         public string ContactNumber { get; set; }
+        [JsonIgnore]
         public ICollection<RentalDto> Rentals { get; set; }
         public bool IsRenter { get; set; } = true;
     }

@@ -77,15 +77,15 @@ namespace Library.Application.Services.Implementations
                 .ToListAsync();
         }
 
-        public async Task<BookDto> GetBookByIdAsync(int id)
+        public async Task<object> GetBookByIdAsync(int id)
         {
             var book = await _context.Books
                 .Include(b => b.AuthorBooks).ThenInclude(ab => ab.Author)
                 .Include(b => b.GenreBooks).ThenInclude(gb => gb.Genre)
                 .Include(b => b.Rentals).ThenInclude(r => r.Renter)
-                .Include(b => b.Rentals).ThenInclude(r => r.Status) 
+                .Include(b => b.Rentals).ThenInclude(r => r.Status)
                 .Include(b => b.Comments).ThenInclude(c => c.Renter)
-                .Include(b => b.Ratings) 
+                .Include(b => b.Ratings)
                 .SingleOrDefaultAsync(b => b.Id == id);
 
             if (book == null)
@@ -93,31 +93,31 @@ namespace Library.Application.Services.Implementations
                 return null;
             }
 
-            return new BookDto
+            return new
             {
                 Id = book.Id,
                 Title = book.Title,
                 PublicationYear = book.PublicationYear,
                 IsAvailable = book.IsAvailable,
-                Authors = book.AuthorBooks.Select(ab => new AuthorDto
+                Authors = book.AuthorBooks.Select(ab => new
                 {
                     Id = ab.Author?.Id ?? 0, // Use null-coalescing operator to handle null values
                     FirstName = ab.Author?.FirstName,
                     LastName = ab.Author?.LastName,
                     Patronymic = ab.Author?.Patronymic
                 }).ToList(),
-                Genres = book.GenreBooks.Select(gb => new GenreDto
+                Genres = book.GenreBooks.Select(gb => new
                 {
                     Id = gb.Genre?.Id ?? 0, // Use null-coalescing operator to handle null values
                     Name = gb.Genre?.Name
                 }).ToList(),
-                Rentals = book.Rentals.Select(r => new RentalDto
+                Rentals = book.Rentals.Select(r => new
                 {
                     Id = r.Id,
                     RentedAt = r.RentedAt,
                     ReturnedAt = r.ReturnedAt,
                     Review = r.Review,
-                    Renter = r.Renter == null ? null : new RenterDto
+                    Renter = r.Renter == null ? null : new
                     {
                         Id = r.Renter.Id,
                         FirstName = r.Renter.FirstName,
@@ -126,28 +126,34 @@ namespace Library.Application.Services.Implementations
                         Address = r.Renter.Address,
                         ContactNumber = r.Renter.ContactNumber
                     },
-                    Status = r.Status == null ? null : new StatusDto
+                    Status = r.Status == null ? null : new
                     {
                         Id = r.Status.Id,
                         Name = r.Status.Name
                     }
                 }).ToList(),
-                Comments = book.Comments.Select(c => new CommentDto
+                Comments = book.Comments.Select(c => new
                 {
                     CommentText = c.CommentText,
                     CommentedAt = c.CommentedAt,
-                    Renter = c.Renter,
+                    Renter = c.Renter == null ? null : new
+                    {
+                        Id = c.Renter.Id,
+                        FirstName = c.Renter.FirstName,
+                        LastName = c.Renter.LastName,
+                        Patronymic = c.Renter.Patronymic,
+                        Address = c.Renter.Address,
+                        ContactNumber = c.Renter.ContactNumber
+                    }
                 }).ToList(),
                 AverageRating = book.Ratings.Count > 0 ? book.Ratings.Average(r => r.RatingValue) : 0.0,
-                Ratings = book.Ratings.Select(r => new RatingDto
+                Ratings = book.Ratings.Select(r => new
                 {
                     RatingValue = r.RatingValue,
                     RenterId = r.RenterId,
-
                 }).ToList(),
             };
         }
-
         public async Task<BookDto> CreateBookAsync(CreateBookDto createBookDto)
         {
             var book = new Book
